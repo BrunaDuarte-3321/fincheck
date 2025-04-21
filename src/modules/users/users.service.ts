@@ -5,6 +5,9 @@ import { UsersRepositories } from 'src/shared/database/repositories/users.reposi
 export class UsersService {
   constructor(private readonly userRepo: UsersRepositories) {}
   getUserById(userId: string) {
-    return userId;
+    return this.userRepo.findUnique({
+      where: { id: userId },
+      select: { name: true, email: true },
+    });
   }
 }
