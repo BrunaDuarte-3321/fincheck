@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: fintcheck
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U root"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build: ./backend
+    container_name: fintcheck_api
+    restart: always
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: "postgres://root:root@db:5432/fintcheck?schema=public"
+      JWT_SECRET: "148dd5d3c31d7472aa9afe182bfcd3550848ad04838d3b4f8253be1676efd62b"
+      BASE_URL: "BASE_URLsdsdsds"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/api
+    command: ./wait-for-db.sh # Chama o script de espera
+
+volumes:
+  postgres_data:
