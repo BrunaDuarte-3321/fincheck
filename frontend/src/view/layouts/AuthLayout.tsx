@@ -6,7 +6,7 @@ export function AuthLayout() {
     <div className="flex w-full h-full">
       <div className=" w-full h-full flex justify-center items-center flex-col gap-16 lg:w-1/2">
         <Logo className="h-6 text-gray-500" />
-        <div className="w-full  max-w-[504px]  bg-red-500 px-8">
+        <div className="w-full  max-w-[504px] px-8">
           <Outlet />
         </div>
       </div>
