@@ -1,32 +1,32 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { authService } from "../../../../app/services/authService/index";
+import { FormRegisterData, registerSchema } from "../registerSchema";
 
-const schema = z.object({
-  name: z.string().nonempty("Nome é obrigatório"),
-  email: z
-    .string()
-    .nonempty("Email é obrigatório")
-    .email("Informe um email valido"),
-  password: z
-    .string()
-    .nonempty("Senha é obrigatória")
-    .min(8, "Senha deve conter de 8 caracteres"),
-});
-
-type IFields = z.infer<typeof schema>;
 export function useRegisterController() {
   const {
     handleSubmit: hookFormHandleSubmit,
     register,
     formState: { errors },
-  } = useForm<IFields>({
-    resolver: zodResolver(schema),
+  } = useForm<FormRegisterData>({
+    resolver: zodResolver(registerSchema),
   });
 
-  const handleSubmit = hookFormHandleSubmit((data) => {
-    /* schema.parse(data); */
-    console.log(data);
+  const { mutateAsync: login } = useMutation({
+    mutationFn: (data: FormRegisterData) => authService.signup(data),
+    /* onSuccess: (response) => {
+      console.log("Usuário registrado com sucesso:", response);
+    },
+    onError: (error) => {
+      console.error("Erro ao registrar:", error);
+    }, */
   });
+
+  const handleSubmit = hookFormHandleSubmit(async (data) => {
+    const { accessToken } = await login(data);
+    console.log({ accessToken });
+  });
+
   return { handleSubmit, register, errors };
 }
