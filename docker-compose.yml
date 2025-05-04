@@ -32,7 +32,7 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/api
-    command: ./wait-for-db.sh # Chama o script de espera
+    command: ./wait-for-db.sh
 
 volumes:
   postgres_data:
