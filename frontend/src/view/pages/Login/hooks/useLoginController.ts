@@ -1,31 +1,25 @@
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { LoginFormData, loginSchema } from "../loginSchema ";
+import { authService } from "../../../../app/services/authService/index";
 
-const schema = z.object({
-  email: z
-    .string()
-    .nonempty("Email é obrigatório")
-    .email("Informe um email valido"),
-  password: z
-    .string()
-    .nonempty("Senha é obrigatória")
-    .min(8, "Senha deve conter de 8 caracteres"),
-});
-
-type IFields = z.infer<typeof schema>;
 export function useLoginController() {
   const {
     handleSubmit: hookFormHandleSubmit,
     register,
     formState: { errors },
-  } = useForm<IFields>({
-    resolver: zodResolver(schema),
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+  const { mutateAsync: login } = useMutation({
+    mutationFn: (data: LoginFormData) => authService.signin(data),
   });
 
-  const handleSubmit = hookFormHandleSubmit((data) => {
-    /* schema.parse(data); */
-    console.log(data);
+  const handleSubmit = hookFormHandleSubmit(async (data) => {
+    const { accessToken } = await login(data);
+    console.log(accessToken);
   });
+
   return { handleSubmit, register, errors };
 }

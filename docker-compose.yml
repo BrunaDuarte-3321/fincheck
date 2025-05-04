@@ -4,7 +4,7 @@ services:
   db:
     image: postgres
     restart: always
-    container_name: fintcheck
+    container_name: fincheck
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
@@ -20,12 +20,12 @@ services:
 
   api:
     build: ./backend
-    container_name: fintcheck_api
+    container_name: fincheck_api
     restart: always
     depends_on:
       - db
     environment:
-      DATABASE_URL: "postgres://root:root@db:5432/fintcheck?schema=public"
+      DATABASE_URL: "postgres://root:root@db:5432/fincheck?schema=public"
       JWT_SECRET: "148dd5d3c31d7472aa9afe182bfcd3550848ad04838d3b4f8253be1676efd62b"
       BASE_URL: "BASE_URLsdsdsds"
     ports:

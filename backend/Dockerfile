@@ -19,4 +19,4 @@ RUN chmod +x wait-for-db.sh
 EXPOSE 3000
 
 # O comando de start vai ser definido no docker-compose.yml
-CMD ["npm", "start"]
+#CMD ["npm", "start"]
