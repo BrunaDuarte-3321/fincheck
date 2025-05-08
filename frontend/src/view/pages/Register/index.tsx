@@ -4,7 +4,7 @@ import { Button } from "../../components/Button";
 import { useRegisterController } from "./hooks/useRegiterController";
 
 export function Register() {
-  const { errors, handleSubmit, register } = useRegisterController();
+  const { errors, handleSubmit, register, isPending } = useRegisterController();
   return (
     <>
       <header className=" flex flex-col items-center gap-4 text-center">
@@ -46,7 +46,7 @@ export function Register() {
           error={errors.password?.message}
           {...register("password")}
         />
-        <Button type="submit" className="mt-2">
+        <Button type="submit" className="mt-2" isLoading={isPending}>
           Criar conta
         </Button>
       </form>

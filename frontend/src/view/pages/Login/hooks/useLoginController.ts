@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { LoginFormData, loginSchema } from "../loginSchema ";
 import { authService } from "../../../../app/services/authService/index";
+import toast from "react-hot-toast";
 
 export function useLoginController() {
   const {
@@ -12,14 +13,20 @@ export function useLoginController() {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
-  const { mutateAsync: login } = useMutation({
-    mutationFn: (data: LoginFormData) => authService.signin(data),
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (data: LoginFormData) => {
+      return authService.signin(data);
+    },
   });
 
   const handleSubmit = hookFormHandleSubmit(async (data) => {
-    const { accessToken } = await login(data);
-    console.log(accessToken);
+    try {
+      const { accessToken } = await mutateAsync(data);
+      console.log({ accessToken });
+    } catch {
+      toast.error("Credenciais inválidas");
+    }
   });
 
-  return { handleSubmit, register, errors };
+  return { handleSubmit, register, errors, isPending };
 }
