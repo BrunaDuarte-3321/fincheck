@@ -4,8 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 import { LoginFormData, loginSchema } from "../loginSchema ";
 import { authService } from "../../../../app/services/authService/index";
 import toast from "react-hot-toast";
+import { useAuth } from "../../../../app/hooks/useAuth";
 
 export function useLoginController() {
+  const { signin } = useAuth();
+
   const {
     handleSubmit: hookFormHandleSubmit,
     register,
@@ -22,7 +25,7 @@ export function useLoginController() {
   const handleSubmit = hookFormHandleSubmit(async (data) => {
     try {
       const { accessToken } = await mutateAsync(data);
-      console.log({ accessToken });
+      signin(accessToken);
     } catch {
       toast.error("Credenciais inválidas");
     }
