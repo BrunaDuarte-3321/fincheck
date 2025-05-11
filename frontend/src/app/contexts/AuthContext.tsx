@@ -1,10 +1,11 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { localStorageKeys } from "../../config/localStorageKeys";
 import { useQuery } from "@tanstack/react-query";
-import { CONST_QUERY_KEYS } from "../constants/queryKeys";
+
 import { usersService } from "../services/usersServices";
 import toast from "react-hot-toast";
 import { LaunchScreen } from "../../view/components/LaunchScreen";
+import { CONST_QUERY_KEYS } from "../../config/constants/queryKeys";
 
 interface IAuthContext {
   signedIn: boolean;

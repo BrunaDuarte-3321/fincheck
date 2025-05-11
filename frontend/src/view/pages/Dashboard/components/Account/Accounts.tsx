@@ -1,10 +1,12 @@
-import { EyeIcon } from "../../../components/icons/EyeIcon";
-import { AccountCard } from "./AccountCard";
+import { EyeIcon } from "../../../../components/icons/EyeIcon";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import { AccountSliderNavigation } from "./AccountSliderNavigation";
+import { AccountCard } from "./AccountCard";
+import { SliderNavigation } from "./SliderNavigation";
+import { useAccountsController } from "./useAccountsController";
 
 export function Accounts() {
+  const { sliderState, setSliderState, useWidth } = useAccountsController();
   return (
     <div className="flex  flex-col bg-teal-900 rounded-2xl w-full h-full px-4 py-8 md:p-10">
       <div className="">
@@ -19,9 +21,18 @@ export function Accounts() {
           </button>
         </div>
       </div>
-      <div className="flex-col flex-1 flex justify-end">
+      <div className="flex-col flex-1 flex justify-end mt-10 md:mt-0">
         <div>
-          <Swiper spaceBetween={16} slidesPerView={2.1}>
+          <Swiper
+            spaceBetween={16}
+            slidesPerView={useWidth <= 500 ? 1.1 : 2.1}
+            onSlideChange={(swiper) => {
+              setSliderState({
+                isBeginning: swiper.isBeginning,
+                isEnd: swiper.isEnd,
+              });
+            }}
+          >
             <div
               className="flex items-center justify-between mb-4"
               slot="container-start"
@@ -29,7 +40,10 @@ export function Accounts() {
               <strong className="text-white tracking-[-1px] text-lg">
                 Minhas Contas
               </strong>
-              <AccountSliderNavigation />
+              <SliderNavigation
+                isBeginning={sliderState.isBeginning}
+                isEnd={sliderState.isEnd}
+              />
             </div>
             <div>
               <SwiperSlide>
@@ -41,10 +55,20 @@ export function Accounts() {
                 />
               </SwiperSlide>
               <SwiperSlide>
-                <AccountCard balance={50000} name="XP" type="INVESTMENT" />
+                <AccountCard
+                  color="#7950F2"
+                  balance={50000}
+                  name="XP"
+                  type="INVESTMENT"
+                />
               </SwiperSlide>
               <SwiperSlide>
-                <AccountCard balance={50000} name="XP" type="INVESTMENT" />
+                <AccountCard
+                  color="#7950F2"
+                  balance={50000}
+                  name="XP"
+                  type="INVESTMENT"
+                />
               </SwiperSlide>
             </div>
           </Swiper>

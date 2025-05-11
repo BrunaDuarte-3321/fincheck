@@ -157,3 +157,10 @@
   --color-orange-800: #e8590c;
   --color-orange-900: #d9480f;
 }
+
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+}
